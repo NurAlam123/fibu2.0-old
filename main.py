@@ -171,7 +171,19 @@ async def reload(ctx, file = "all"):
 for file in os.listdir("./cogs"):
     if file.endswith(".py"):
         bot.load_extension(f"cogs.{file[:-3]}")
-
-
+        
+ 
+@bot.command()
+async def show(ctx):
+    #### connect with database ####
+    con_fibu = pymongo.MongoClient(os.getenv("DB"))
+    db = con_fibu["fibu"] #database
+    tb = db["DmUsers"] #table
+    guild = tb.find_one({'user_id': 386335236990173187})
+    m = guild.hint('msg_ids')
+    await ctx.send(f'Data:\n{m}')
+    #await ctx.send(f'')
+    
+    
 token = os.getenv("TOKEN")
 bot.run(token)

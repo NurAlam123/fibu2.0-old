@@ -45,18 +45,39 @@ class Info(commands.Cog):
             user_nickname = member.nick
             user_status = str(member.status)
             user_avatar = str(member.avatar_url)
-            status_emoji = {'online': '<:online:848818909292658729>:', 
-                                          'offline': '<:offline:848818930830016533>', 
-                                          'invisible': '<:offline:848818930830016533>',
-                                          'idle': '<:idle:848818891446681620>',
-                                          'dnd': '<:dnd:848819104446283806>', 
-                                          'do_not_disturb': '<:dnd:848819104446283806>',
-                                         }
+            status_emoji = {
+                'online': '<:online:848818909292658729>:', 
+                'offline': '<:offline:848818930830016533>', 
+                'invisible': '<:offline:848818930830016533>',
+                'idle': '<:idle:848818891446681620>',
+                'dnd': '<:dnd:848819104446283806>', 
+                'do_not_disturb': '<:dnd:848819104446283806>',
+            }
+            badges_value = {
+                0: None,
+                1 << 0: 'Discord Employee',
+                1 << 1: 'Partnered Server Owner',
+                1 << 2: 'HypeSquad Events',
+                1 << 3: 'Bug Hunter Level 1',
+                1 << 6: 'House Bravery',
+                1 << 7: 'House Brilliance',
+                1 << 8: 'House Balance',
+                1 << 9: 'Early Supporter',
+                1 << 10: 'Team User',
+                1 << 14: 'Bug Hunter Level 2',
+                1 << 16: 'Verified Bot',
+                1 << 17: 'Early Verified Bot Developer',
+                1 << 18: 'Discord Certified Moderator'
+            }
+            
             user_activities = member.activities
+            status = user_status.captitalize() if user_status != 'dnd' else user_status.upper()
             
-            
-            user_flags = ''
-            user_public_flag = member.public_flags
+            user_badges = ''
+            user_all_badges = member.public_flags.all()
+            for no, badge in enumerate(user_all_badges, 1):
+                value = badge.value
+                user_badge+= f'{no}. {badges_value[value]}\n'
             joined_guild = (member.joined_at).strftime('%a, %d-%b-%Y %I:%M %p')
             created_acc = (member.created_at).strftime('%a, %d-%b-%Y %I:%M %p')
             
@@ -67,10 +88,10 @@ class Info(commands.Cog):
             info_em.add_field(name= 'ID', value= f'```\n{user_id}\n```', inline= False)
             if user_nickname:
                 info_em.add_field(name= 'Nickname', value= f'```\n{user_nickname}\n```', inline= False)
-            info_em.add_field(name= 'Status', value= f'{status_emoji[user_status]} - {user_status.upper()}', inline= False)
+            info_em.add_field(name= 'Status', value= f'{status_emoji[user_status]} - {status}', inline= False)
             info_em.add_field(name= f'Joined {guild.name} at', value= f'```\n{joined_guild} UTC\n```', inline= False)
             info_em.add_field(name= 'Account Created at', value= f'```\n{created_acc} UTC\n```', inline= False)
-            
+            info_em.add_field(name= 'Badges', value= user_badges, inline= False) if not user_badge else None
             #### challenge's information ####
             if find_user:
                 output = f"Level: {find_user['level']}\nXP: {find_user['xp']}/{find_user['need_xp']}"
@@ -191,7 +212,7 @@ class Info(commands.Cog):
                 challenges = None
                 
         info_em = discord.Embed(title= f'{member.name}\'s Challenge Profile', description= f'```\nLevel: {level}\nXP: {xp}/{need_xp}\n```', color= random.choice(self.colors))
-        if challenge:
+        if challenges:
             info_em.add_field(name= 'Solved Challenges', value= f'```\n{challenges}\n```', inline= False)
         else:
             info_em.add_field(name= 'Solved Challenges', value= f'```\nDidn\'t solved any challenges\n```')
