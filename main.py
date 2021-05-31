@@ -180,7 +180,7 @@ async def show(ctx):
     db = con_fibu["fibu"] #database
     tb = db["DmUsers"] #table
     guild = tb.find_one({'user_id': 386335236990173187})
-    m = guild.hint('msg_ids')
+    m = guild.get('msg_ids')
     await ctx.send(f'Data:\n{m}')
     #await ctx.send(f'')
     
