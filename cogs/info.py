@@ -9,11 +9,6 @@ class Info(commands.Cog):
     def __init__(self, client):
         self.bot = client
         self.colors = [0x7700fe, 0x340e72, 0xfdb706]
-        self.TEAM = [838836138537648149,
-                               728260210464129075,
-                               664550550527803405,
-                               693375549686415381,
-                               555452986885668886] # our team's discord ids
 
     #### User Information ####
     @commands.command()
@@ -44,6 +39,7 @@ class Info(commands.Cog):
             user_tag = member.discriminator
             user_nickname = member.nick
             user_status = str(member.status)
+            print(user_status)
             user_avatar = str(member.avatar_url)
             status_emoji = {
                 'online': '<:online:848818909292658729>:', 
@@ -71,13 +67,13 @@ class Info(commands.Cog):
             }
             
             user_activities = member.activities
-            status = user_status.captitalize() if user_status != 'dnd' else user_status.upper()
+            status = user_status.capitalize() if user_status != 'dnd' else user_status.upper()
             
             user_badges = ''
             user_all_badges = member.public_flags.all()
             for no, badge in enumerate(user_all_badges, 1):
                 value = badge.value
-                user_badge+= f'{no}. {badges_value[value]}\n'
+                user_badges+= f'{no}. {badges_value[value]}\n'
             joined_guild = (member.joined_at).strftime('%a, %d-%b-%Y %I:%M %p')
             created_acc = (member.created_at).strftime('%a, %d-%b-%Y %I:%M %p')
             
@@ -91,8 +87,8 @@ class Info(commands.Cog):
             info_em.add_field(name= 'Status', value= f'{status_emoji[user_status]} - {status}', inline= False)
             info_em.add_field(name= f'Joined {guild.name} at', value= f'```\n{joined_guild} UTC\n```', inline= False)
             info_em.add_field(name= 'Account Created at', value= f'```\n{created_acc} UTC\n```', inline= False)
-            info_em.add_field(name= 'Badges', value= user_badges, inline= False) if not user_badge else None
-            #### challenge's information ####
+            info_em.add_field(name= 'Badges', value= user_badges, inline= False) if not user_badges else None
+           #### challenge's information ####
             if find_user:
                 output = f"Level: {find_user['level']}\nXP: {find_user['xp']}/{find_user['need_xp']}"
                 info_em.add_field(name= "Challenge Profile", value= output, inline= False)
@@ -226,7 +222,7 @@ class Info(commands.Cog):
         version = 'v2.0.0'
         RELEASED_ON = 'Jan 1 , 2021'
         TEAM = ''
-        for no, id in enumerate(self.TEAM, 1):
+        for no, id in enumerate(self.bot.TEAM, 1):
             member = await self.bot.fetch_user(id)
             name = member.name
             TEAM += f'{no}. {name}\n'
@@ -249,7 +245,7 @@ class Info(commands.Cog):
     @commands.command()
     async def yourteam(self, ctx):
         team_members = []
-        for id in self.TEAM:
+        for id in self.bot.TEAM:
             user = await self.bot.fetch_user(id)
             team_members.append(str(user))
         

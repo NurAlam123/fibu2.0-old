@@ -14,8 +14,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 ########
 
-TEAM = [838836138537648149, 728260210464129075, 664550550527803405, 693375549686415381, 555452986885668886] # our team's discord ids
-
 ### prefixes ###
 prefix_file = open("prefix.txt","r")
 fibu_prefixes = [i.replace("\n"," ") for i in prefix_file.readlines()]
@@ -25,6 +23,8 @@ intents.members = True
 
 ### bot
 bot = commands.Bot(command_prefix= fibu_prefixes, intents= intents, case_insensitive= True, help_command= None)
+
+bot.TEAM = [838836138537648149, 728260210464129075, 664550550527803405, 693375549686415381, 555452986885668886] # our team's discord ids
 
 ### on ready
 @bot.event
