@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 prefix_file = open("prefix.txt","r")
 fibu_prefixes = [i.replace("\n"," ") for i in prefix_file.readlines()]
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 
 ### bot
